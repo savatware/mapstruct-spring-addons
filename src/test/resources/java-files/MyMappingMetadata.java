@@ -8,7 +8,7 @@ import io.github.savatware.mapstruct.extensions.spring.MappingMetadataLookup;
 
 @Generated(
         value = "io.github.savatware.mapstruct.extensions.spring.processor.MappingMetadataProcessor",
-        date = "2025-10-25T12:20:11+0200"
+        date = "2025-10-16T09:32:43+0200"
 )
 @Component
 public class MyMappingMetadata implements MappingMetadataLookup {
