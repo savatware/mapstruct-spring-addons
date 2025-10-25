@@ -2,6 +2,7 @@ package io.github.savatware.mapstruct.extensions.spring.processor;
 
 
 import io.github.savatware.mapstruct.extensions.spring.testutils.TestResourceReader;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -13,21 +14,34 @@ import static io.github.savatware.mapstruct.extensions.spring.testutils.Compilat
 
 class MappingMetadataProcessorTest {
 
-    @Test
-    void whenClassNameSpecified_thenFileName_isCorrect() {
-        // given
-        var metadataProcessor = createMappingMetadataProcessor();
-        var mapperJavaFile = TestResourceReader.readJavaFileObject("MyMapper");
-        var expectedSourceCode = TestResourceReader.readJavaSource("MyMappingMetadata");
+    // TODO test suite for packages: test with package, without package
 
-        // when
-        var compilation = javac()
-                .withProcessors(metadataProcessor)
-                .compile(List.of(mapperJavaFile));
+    @Nested
+    class ClassNameTests {
 
-        // then
-        assertThat(compilation).succeeded();
-        assertThat(compilation).generatedSourceCode("com.mycompany.test.MyMappingMetadata").isEqualTo(expectedSourceCode);
+        // TODO test when no classname
+
+        // TODO test when same classname used twice
+
+        // TODO test when empty classname
+
+        @Test
+        void whenClassNameSpecified_thenFileName_isCorrect() {
+            // given
+            var metadataProcessor = createMappingMetadataProcessor();
+            var mapperJavaFile = TestResourceReader.readJavaFileObject("MyMapper");
+            var expectedSourceCode = TestResourceReader.readJavaSource("MyMappingMetadata");
+
+            // when
+            var compilation = javac()
+                    .withProcessors(metadataProcessor)
+                    .compile(List.of(mapperJavaFile));
+
+            // then
+            assertThat(compilation).succeeded();
+            assertThat(compilation).generatedSourceCode("com.mycompany.test.MyMappingMetadata").isEqualTo(expectedSourceCode);
+        }
+
     }
 
     private MappingMetadataProcessor createMappingMetadataProcessor() {
