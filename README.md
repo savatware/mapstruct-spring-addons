@@ -9,6 +9,8 @@ This library contains additions to MapStruct when working with the Spring Framew
 These additions provide functionality which is not available in [MapStruct](https://github.com/mapstruct/mapstruct), 
 and also not available in [MapStruct Spring Extensions](https://github.com/mapstruct/mapstruct-spring-extensions).
 
+Similarly as MapStruct, this library uses JSR-269 annotation processing for code generation.
+
 #### Table of Contents
 <!-- TOC -->
 * [Set up](#set-up)
@@ -32,6 +34,9 @@ Because these annotations have a retention setting that don't allow you to use r
 The `@MappingMetadata` annotation fixes this issue. When declaring it on a mapping method, then 
 a source file will be generated describing the mapping annotations on that method.
 
+Not only are you now able to access the mapping information, but you also don't need to use reflection and
+can benefit from the performance of compiled code.
+
 For example:
 
 ```java
@@ -50,7 +55,7 @@ public interface CarMapper {
 }
 ```
 The `@MappingMetadata` annotation causes the code generator to create an implementation of the 
-`MappingMetadataLookup` interface during build-time.  
+`MappingMetadataLookup` interface during build-time. 
 
 To get a better understanding of what the code generation does, have a look at the following implementation:
 ```java
@@ -72,7 +77,7 @@ public class CarMappingMetadata implements MappingMetadataLookup {
 }
 ```
 Since the implementation is tagged as a SpringBean using `@Component`, you can autowire the dependency
-to access the mapping metadata. Use the name of the class in camelCase as a qualifier for injection.
+to access the mapping metadata. Use the name of the class in camelCase as a qualifier for injection.  
 For example:
 ```java
 @Service
@@ -89,7 +94,7 @@ public class CarService {
 ```
 
 > [!TIP]  
-> Example use-case: Use this annotation to convert a sort field as known by a client
+> Use-case: Use this annotation to convert a sort field as known by a client
 > to the property known in your model
 
 ### Pageable Support
