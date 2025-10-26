@@ -80,15 +80,15 @@
     </licenses>
 
     <scm>
-        <developerConnection>scm:git:git@github.com:savatware/mapstruct-spring-extensions.git</developerConnection>
-        <connection>scm:git:git@github.com:savatware/mapstruct-spring-extensions.git</connection>
-        <url>git@github.com:savatware/mapstruct-spring-extensions.git</url>
+        <developerConnection>scm:git:git@github.com:savatware/mapstruct-spring-addons.git</developerConnection>
+        <connection>scm:git:git@github.com:savatware/mapstruct-spring-addons.git</connection>
+        <url>git@github.com:savatware/mapstruct-spring-addons.git</url>
         <tag>HEAD</tag>
     </scm>
 
     <issueManagement>
         <system>github</system>
-        <url>https://github.com/savatware/mapstruct-spring-extensions/issues</url>
+        <url>https://github.com/savatware/mapstruct-spring-addons/issues</url>
     </issueManagement>
 
 </project>

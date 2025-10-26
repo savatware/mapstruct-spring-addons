@@ -1,7 +1,7 @@
-package io.github.savatware.mapstruct.extensions.spring.processor;
+package io.github.savatware.mapstruct.addons.spring.processor;
 
-import io.github.savatware.mapstruct.extensions.spring.MappingDescription;
-import io.github.savatware.mapstruct.extensions.spring.MappingMetadata;
+import io.github.savatware.mapstruct.addons.spring.MappingDescription;
+import io.github.savatware.mapstruct.addons.spring.MappingMetadata;
 import org.mapstruct.Mapping;
 
 import javax.annotation.processing.ProcessingEnvironment;

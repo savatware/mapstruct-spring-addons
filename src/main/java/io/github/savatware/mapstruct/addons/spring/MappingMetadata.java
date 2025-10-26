@@ -1,4 +1,4 @@
-package io.github.savatware.mapstruct.extensions.spring;
+package io.github.savatware.mapstruct.addons.spring;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

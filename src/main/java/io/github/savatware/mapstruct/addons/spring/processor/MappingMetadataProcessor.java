@@ -1,6 +1,6 @@
-package io.github.savatware.mapstruct.extensions.spring.processor;
+package io.github.savatware.mapstruct.addons.spring.processor;
 
-import io.github.savatware.mapstruct.extensions.spring.MappingDescription;
+import io.github.savatware.mapstruct.addons.spring.MappingDescription;
 
 import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
@@ -13,13 +13,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static io.github.savatware.mapstruct.extensions.spring.processor.GeneratedFileWriter.writeFile;
+import static io.github.savatware.mapstruct.addons.spring.processor.GeneratedFileWriter.writeFile;
 
 /**
  * A JSR 269 annotation {@link Processor} which generates the implementations of metadata for mappings (methods
  * annotated with {@code @MappingMetadata}).
  */
-@SupportedAnnotationTypes("io.github.savatware.mapstruct.extensions.spring.MappingMetadata")
+@SupportedAnnotationTypes("io.github.savatware.mapstruct.addons.spring.MappingMetadata")
 public class MappingMetadataProcessor extends AbstractProcessor {
 
     private ZonedDateTime now;

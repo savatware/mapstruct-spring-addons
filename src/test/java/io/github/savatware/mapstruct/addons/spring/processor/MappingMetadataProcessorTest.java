@@ -1,7 +1,7 @@
-package io.github.savatware.mapstruct.extensions.spring.processor;
+package io.github.savatware.mapstruct.addons.spring.processor;
 
 
-import io.github.savatware.mapstruct.extensions.spring.testutils.TestResourceReader;
+import io.github.savatware.mapstruct.addons.spring.testutils.TestResourceReader;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -10,9 +10,37 @@ import java.time.ZoneId;
 import java.util.List;
 
 import static com.google.testing.compile.Compiler.javac;
-import static io.github.savatware.mapstruct.extensions.spring.testutils.CompilationAssert.assertThat;
+import static io.github.savatware.mapstruct.addons.spring.testutils.CompilationAssert.assertThat;
 
 class MappingMetadataProcessorTest {
+
+
+    @Nested
+    class ReadmeTests {
+
+        // This test suite covers the code used in the README.md
+
+        @Test
+        void carExample() {
+            // given
+            var metadataProcessor = createMappingMetadataProcessor();
+            var mapperJavaFile = TestResourceReader.readJavaFileObject("CarMapper");
+            var expectedCarMetadataSourceCode = TestResourceReader.readJavaSource("CarMappingMetadata");
+            var expectedPersonMetadataSourceCode = TestResourceReader.readJavaSource("PersonMappingMetadata");
+
+            // when
+            var compilation = javac()
+                    .withProcessors(metadataProcessor)
+                    .compile(List.of(mapperJavaFile));
+
+            // then
+            assertThat(compilation).succeeded();
+            assertThat(compilation).generatedSourceJavaFiles().hasSize(2);
+            assertThat(compilation).generatedSourceCode("com.mycompany.test.CarMappingMetadata").isEqualTo(expectedCarMetadataSourceCode);
+            assertThat(compilation).generatedSourceCode("com.mycompany.test.PersonMappingMetadata").isEqualTo(expectedPersonMetadataSourceCode);
+        }
+
+    }
 
     // TODO test suite for packages: test with package, without package
 

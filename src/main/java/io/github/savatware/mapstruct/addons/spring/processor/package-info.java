@@ -10,4 +10,4 @@
  * should never work with these types directly.
  * </p>
  */
-package io.github.savatware.mapstruct.extensions.spring.processor;
+package io.github.savatware.mapstruct.addons.spring.processor;

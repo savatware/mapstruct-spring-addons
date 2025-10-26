@@ -12,11 +12,12 @@ import io.github.savatware.mapstruct.addons.spring.MappingDescription;
         date = "2025-10-16T09:32:43+0200"
 )
 @Component
-public class MyMappingMetadata implements MappingMetadataLookup {
+public class PersonMappingMetadata implements MappingMetadataLookup {
 
     private final List<MappingDescription> mappingDescriptions = new ArrayList<>();
 
-    public MyMappingMetadata() {
+    public PersonMappingMetadata() {
+        mappingDescriptions.add(new MappingDescription("name", "fullName", "", "", "", "", "", false, new String[] {}, new String[] {}, "", new String[] {}, ""));
     }
 
     @Override

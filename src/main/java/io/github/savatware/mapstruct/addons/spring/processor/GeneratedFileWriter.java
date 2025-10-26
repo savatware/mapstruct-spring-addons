@@ -1,7 +1,7 @@
-package io.github.savatware.mapstruct.extensions.spring.processor;
+package io.github.savatware.mapstruct.addons.spring.processor;
 
 
-import io.github.savatware.mapstruct.extensions.spring.MappingDescription;
+import io.github.savatware.mapstruct.addons.spring.MappingDescription;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -60,14 +60,13 @@ public class GeneratedFileWriter {
                     "\"" + mapping.constant() + "\", " +
                     "\"" + mapping.expression() + "\", " +
                     "\"" + mapping.defaultExpression() + "\", " +
-                    "\"" + mapping.ignore() + "\", " +
+                    mapping.ignore() + ", " +
                     toStringArray(mapping.qualifiedByName()) + ", " +
                     toStringArray(mapping.conditionQualifiedByName()) + ", " +
                     "\"" + mapping.conditionExpression() + "\", " +
                     toStringArray(mapping.dependsOn()) + ", " +
                     "\"" + mapping.defaultValue() + "\"" +
-                    ");\n");
-            writer.write("\n");
+                    "));\n");
         }
         writer.write(INDENT + "}\n");
         writer.write("\n");
@@ -94,8 +93,8 @@ public class GeneratedFileWriter {
         writer.write("import org.springframework.stereotype.Component;\n");
         writer.write("import java.util.List;\n");
         writer.write("import java.util.ArrayList;\n");
-        writer.write("import io.github.savatware.mapstruct.extensions.spring.MappingMetadataLookup;\n");
-        writer.write("import io.github.savatware.mapstruct.extensions.spring.MappingDescription;\n");
+        writer.write("import io.github.savatware.mapstruct.addons.spring.MappingMetadataLookup;\n");
+        writer.write("import io.github.savatware.mapstruct.addons.spring.MappingDescription;\n");
         writer.write("\n");
     }
 

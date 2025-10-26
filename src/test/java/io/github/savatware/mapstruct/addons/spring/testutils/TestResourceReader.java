@@ -1,4 +1,4 @@
-package io.github.savatware.mapstruct.extensions.spring.testutils;
+package io.github.savatware.mapstruct.addons.spring.testutils;
 
 import com.google.testing.compile.JavaFileObjects;
 

@@ -1,6 +1,6 @@
 package com.mycompany.test;
 
-import io.github.savatware.mapstruct.extensions.spring.MappingMetadata;
+import io.github.savatware.mapstruct.addons.spring.MappingMetadata;
 import org.mapstruct.Mapper;
 
 @Mapper
