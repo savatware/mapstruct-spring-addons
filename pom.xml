@@ -4,10 +4,10 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.github.savatware</groupId>
-    <artifactId>mapstruct-spring-extensions</artifactId>
+    <artifactId>mapstruct-spring-addons</artifactId>
     <version>${revision}</version>
     <packaging>jar</packaging>
-    <name>MapStruct Spring Extensions</name>
+    <name>MapStruct Spring Addons</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -71,5 +71,24 @@
             </plugin>
         </plugins>
     </build>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <scm>
+        <developerConnection>scm:git:git@github.com:savatware/mapstruct-spring-extensions.git</developerConnection>
+        <connection>scm:git:git@github.com:savatware/mapstruct-spring-extensions.git</connection>
+        <url>git@github.com:savatware/mapstruct-spring-extensions.git</url>
+        <tag>HEAD</tag>
+    </scm>
+
+    <issueManagement>
+        <system>github</system>
+        <url>https://github.com/savatware/mapstruct-spring-extensions/issues</url>
+    </issueManagement>
 
 </project>

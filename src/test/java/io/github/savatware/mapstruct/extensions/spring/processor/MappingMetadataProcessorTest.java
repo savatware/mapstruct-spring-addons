@@ -18,6 +18,7 @@ class MappingMetadataProcessorTest {
 
     // TODO test suite for component type: test for spring for others
 
+    // TODO test suite for checking Mapper's attributes are correctly put into MapperDescription
 
     @Nested
     class ClassNameTests {

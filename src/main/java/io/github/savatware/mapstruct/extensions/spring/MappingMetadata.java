@@ -7,16 +7,15 @@ import java.lang.annotation.Target;
 
 
 /**
- *  * Usage: specify the name of the class to generate
- *  * e.g.
- *  *   @MappingMetadata("MyDtoMetadata")
+ *  Usage: specify the name of the class to generate
+ *  e.g. @MappingMetadata("MyDtoMetadata")
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface MappingMetadata {
 
-     /** Name of the generated class. When using this annotation multiple times in your project, then make sure to add a unique name. */
+     /** Name of the generated class. When using this annotation multiple times in your project, make sure to use a unique name. */
+    String value();
 
-    String value() default "MappingMetadataLookupImpl";
 }
 

@@ -1,13 +1,16 @@
 package io.github.savatware.mapstruct.extensions.spring.processor;
 
+import io.github.savatware.mapstruct.extensions.spring.MappingDescription;
+
 import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
+import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.tools.Diagnostic;
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.HashSet;
-import java.util.Optional;
+import java.util.List;
 import java.util.Set;
 
 import static io.github.savatware.mapstruct.extensions.spring.processor.GeneratedFileWriter.writeFile;
@@ -50,20 +53,16 @@ public class MappingMetadataProcessor extends AbstractProcessor {
             for (var element : roundEnv.getElementsAnnotatedWith(annotation)) {
                 processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE, "Processing mapping metadata for " + element.getSimpleName());
 
-                // TODO cleanup by combining properties in a class
-                var packageFullyQualifiedName = elementInspector.getPackageName(element);
-                var className = elementInspector.getClassName(element).orElse("");
-                var mappings = elementInspector.getMappings(element);
-                var dateTime = getDateTime();
+                var fields = new Fields(elementInspector, element, getDateTime());
 
-                if (className.contains(".")) {
+                if (fields.getClassName().contains(".")) {
                     var containingClass = elementInspector.getContainingClass(element);
                     processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR,
-                            "Class name can not contain a dot, received: " + className + ", defined in \"" + containingClass + "\"");
+                            "Class name can not contain a dot, received: " + fields.getClassName() + ", defined in \"" + containingClass + "\"");
                     continue; // skip invalid class names
                 }
 
-                if (className.isEmpty()) {
+                if (fields.getClassName().isEmpty()) {
                     var containingClass = elementInspector.getContainingClass(element);
                     processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR,
                             "Skipping creation for requested empty classname, defined in \"" + containingClass + "\"");
@@ -71,7 +70,7 @@ public class MappingMetadataProcessor extends AbstractProcessor {
                 }
 
                 try {
-                    var fqdn = packageFullyQualifiedName + '.' + className;
+                    var fqdn = fields.getFullyQualifiedName();
                     if (generatedClasses.contains(fqdn)) {
                         processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, "Skipping creation for duplicate class, received: " + fqdn);
                         continue;
@@ -81,7 +80,7 @@ public class MappingMetadataProcessor extends AbstractProcessor {
                     var filer = processingEnv.getFiler();
                     var fileObject = filer.createSourceFile(fqdn);
                     try (var writer = fileObject.openWriter()) {
-                        writeFile(writer, packageFullyQualifiedName, className, mappings, dateTime);
+                        writeFile(writer, fields);
                     }
                 } catch (IOException e) {
                     processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, "Failed to generate class: " + e.getMessage());
@@ -89,6 +88,42 @@ public class MappingMetadataProcessor extends AbstractProcessor {
             }
         }
         return true; // No further processing of this annotation
+    }
+
+    // TODO extract to separate file and rename should be under processor package
+    public static class Fields {
+
+        private final String packageName;
+        private final String className;
+        private final List<MappingDescription> mappings;
+        private final ZonedDateTime dateTime;
+
+        public Fields(ElementInspector inspector, Element element, ZonedDateTime dateTime) {
+            this.packageName = inspector.getPackageName(element);
+            this.className = inspector.getClassName(element).orElse("");
+            this.mappings = inspector.getMappings(element);
+            this.dateTime = dateTime;
+        }
+
+        public String getFullyQualifiedName() {
+            return packageName + "." + className;
+        }
+
+        public String getPackageName() {
+            return packageName;
+        }
+
+        public String getClassName() {
+            return className;
+        }
+
+        public List<MappingDescription> getMappings() {
+            return mappings;
+        }
+
+        public ZonedDateTime getDateTime() {
+            return dateTime;
+        }
     }
 
 }

@@ -2,9 +2,10 @@ package com.mycompany.test;
 
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
-import java.util.Map;
-import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
 import io.github.savatware.mapstruct.extensions.spring.MappingMetadataLookup;
+import io.github.savatware.mapstruct.extensions.spring.MappingDescription;
 
 @Generated(
         value = "io.github.savatware.mapstruct.extensions.spring.processor.MappingMetadataProcessor",
@@ -13,20 +14,14 @@ import io.github.savatware.mapstruct.extensions.spring.MappingMetadataLookup;
 @Component
 public class MyMappingMetadata implements MappingMetadataLookup {
 
-    private final Map<String, String> mapSourceToTarget = new HashMap<>();
-    private final Map<String, String> mapTargetToSource = new HashMap<>();
+    private final List<MappingDescription> mappingDescriptions = new ArrayList<>();
 
     public MyMappingMetadata() {
     }
 
     @Override
-    public String getTargetMapping(String sourceName) {
-        return mapSourceToTarget.getOrDefault(sourceName, sourceName);
-    }
-
-    @Override
-    public String getSourceMapping(String targetName) {
-        return mapTargetToSource.getOrDefault(targetName, targetName);
+    public List<MappingDescription> getMappingDescriptions() {
+        return mappingDescriptions;
     }
 
 }

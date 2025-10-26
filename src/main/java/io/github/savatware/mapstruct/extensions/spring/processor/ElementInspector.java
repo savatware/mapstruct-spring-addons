@@ -1,5 +1,6 @@
 package io.github.savatware.mapstruct.extensions.spring.processor;
 
+import io.github.savatware.mapstruct.extensions.spring.MappingDescription;
 import io.github.savatware.mapstruct.extensions.spring.MappingMetadata;
 import org.mapstruct.Mapping;
 
@@ -7,7 +8,6 @@ import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.PackageElement;
 import javax.tools.Diagnostic;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -27,19 +27,12 @@ public class ElementInspector {
         return Optional.of(className);
     }
 
-    public List<MappingValues> getMappings(Element element) {
+    public List<MappingDescription> getMappings(Element element) {
         processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE, " *** Mapping Metadata");
         var mappingAnnotations = element.getAnnotationsByType(Mapping.class);
-        var mappings = new ArrayList<MappingValues>();
-
-        Arrays.stream(mappingAnnotations).forEach(mappingAnnotation -> {
-            if (isNotBlank(mappingAnnotation.source()) && isNotBlank(mappingAnnotation.target())) {
-                processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE, " *** " + mappingAnnotation.source() + " - " + mappingAnnotation.target());
-                mappings.add(new MappingValues(mappingAnnotation.source(), mappingAnnotation.target(), mappingAnnotation.qualifiedByName()));
-            }
-        });
-
-        return mappings;
+        return Arrays.stream(mappingAnnotations)
+                .map(this::createMappingDescription)
+                .toList();
     }
 
     public String getContainingClass(Element element) {
@@ -60,8 +53,23 @@ public class ElementInspector {
         return packageFullyQualifiedName;
     }
 
-    private boolean isNotBlank(String value) {
-        return value != null && !value.isEmpty();
+    private MappingDescription createMappingDescription(Mapping mappingAnnotation) {
+        processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE, " *** " + mappingAnnotation.source() + " - " + mappingAnnotation.target());
+        return new MappingDescription(
+                mappingAnnotation.source(),
+                mappingAnnotation.target(),
+                mappingAnnotation.dateFormat(),
+                mappingAnnotation.numberFormat(),
+                mappingAnnotation.constant(),
+                mappingAnnotation.expression(),
+                mappingAnnotation.defaultExpression(),
+                mappingAnnotation.ignore(),
+                mappingAnnotation.qualifiedByName(),
+                mappingAnnotation.conditionQualifiedByName(),
+                mappingAnnotation.conditionExpression(),
+                mappingAnnotation.dependsOn(),
+                mappingAnnotation.defaultValue()
+        );
     }
 
 }
