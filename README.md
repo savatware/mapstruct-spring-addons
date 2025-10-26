@@ -23,7 +23,23 @@ Similarly as MapStruct, this library uses JSR-269 annotation processing for code
 ## Set up
 
 ### Maven
-TODO maven setup
+For maven based projects add the following to your POM file in order to use MapStruct Spring Addons.  
+
+```xml
+...
+<properties>
+    <mapstruct-spring-addons.version>1.0.0</mapstruct-spring-addons.version>
+</properties>
+...
+<dependencies>
+    <dependency>
+        <groupId>io.github.savatware</groupId>
+        <artifactId>mapstruct-spring-addons</artifactId>
+        <version>${mapstruct-spring-addons.version}</version>
+    </dependency>
+</dependencies>
+```
+Adding the dependency will also enable the annotation processing during compilation.
 
 ## Features
 
