@@ -32,6 +32,7 @@ public class GeneratedFileWriter {
         writer.write("\n");
     }
 
+    // TODO only add if the component type is Spring
     public static void writeSpringStereotypeAnnotation(Writer writer) throws IOException {
         writer.write("@Component\n");
     }

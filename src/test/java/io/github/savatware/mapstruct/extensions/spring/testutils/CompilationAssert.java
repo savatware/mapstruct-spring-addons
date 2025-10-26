@@ -2,8 +2,16 @@ package io.github.savatware.mapstruct.extensions.spring.testutils;
 
 import com.google.testing.compile.Compilation;
 import org.assertj.core.api.AbstractAssert;
+import org.assertj.core.api.Assertions;
+import org.assertj.core.api.ListAssert;
+
+import javax.tools.JavaFileObject;
+
+import java.util.stream.Collectors;
 
 import static com.google.testing.compile.Compilation.Status.FAILURE;
+import static com.google.testing.compile.Compilation.Status.SUCCESS;
+import static java.util.Collections.emptyList;
 
 public class CompilationAssert extends AbstractAssert<CompilationAssert, Compilation> {
 
@@ -23,6 +31,14 @@ public class CompilationAssert extends AbstractAssert<CompilationAssert, Compila
         return this;
     }
 
+    public CompilationAssert failed() {
+        isNotNull();
+        if (actual.status().equals(SUCCESS)) {
+            failWithMessage("Expected compilation to have failed, but it succeeded");
+        }
+        return this;
+    }
+
     public SourceCodeAssert generatedSourceCode(String qualifiedName) {
         isNotNull();
         try {
@@ -36,4 +52,31 @@ public class CompilationAssert extends AbstractAssert<CompilationAssert, Compila
             return SourceCodeAssert.assertThat("");
         }
     }
+
+    public ListAssert<JavaFileObject> generatedSourceJavaFiles() {
+        isNotNull();
+        if (actual.status().equals(FAILURE)) {
+            return Assertions.assertThat(emptyList());
+        }
+        var generatedSourceFiles = actual.generatedFiles().stream()
+                .filter(javaFileObject -> javaFileObject.toUri().toString().contains("SOURCE_OUTPUT"))
+                .toList();
+        return Assertions.assertThat(generatedSourceFiles);
+    }
+
+    public CompilationAssert hasError(String expectedError) {
+        isNotNull();
+
+        var isFound = actual.errors().stream()
+                .anyMatch(error -> error.toString().contains(expectedError));
+        if (!isFound) {
+            var actualErrors = actual.errors().stream()
+                    .map(error -> "  - " + error.toString())
+                    .collect(Collectors.joining(System.lineSeparator()));
+            failWithMessage("Expected error \"%s\" not found. \nActual errors: \n%s", expectedError, actualErrors);
+        }
+
+        return this;
+    }
+
 }

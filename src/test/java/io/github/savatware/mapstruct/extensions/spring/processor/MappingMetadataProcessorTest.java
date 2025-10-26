@@ -16,14 +16,19 @@ class MappingMetadataProcessorTest {
 
     // TODO test suite for packages: test with package, without package
 
+    // TODO test suite for component type: test for spring for others
+
+
     @Nested
     class ClassNameTests {
 
-        // TODO test when no classname
+        // TODO test with multiple source files
+
+        // TODO test with multiple source files with same class name
 
         // TODO test when same classname used twice
 
-        // TODO test when empty classname
+        // TODO test when no specified classname
 
         @Test
         void whenClassNameSpecified_thenFileName_isCorrect() {
@@ -39,7 +44,40 @@ class MappingMetadataProcessorTest {
 
             // then
             assertThat(compilation).succeeded();
+            assertThat(compilation).generatedSourceJavaFiles().hasSize(1);
             assertThat(compilation).generatedSourceCode("com.mycompany.test.MyMappingMetadata").isEqualTo(expectedSourceCode);
+        }
+
+        @Test
+        void whenClassNameEmpty_thenGeneration_fails() {
+            // given
+            var metadataProcessor = createMappingMetadataProcessor();
+            var mapperJavaFile = TestResourceReader.readJavaFileObject("MyMapperWithEmptyName");
+
+            // when
+            var compilation = javac()
+                    .withProcessors(metadataProcessor)
+                    .compile(List.of(mapperJavaFile));
+
+            // then
+            assertThat(compilation).failed();
+            assertThat(compilation).hasError("Skipping creation for requested empty classname, defined in \"MyMapperWithEmptyName\"");
+        }
+
+        @Test
+        void whenClassNameContainsDot_thenGeneration_fails() {
+            // given
+            var metadataProcessor = createMappingMetadataProcessor();
+            var mapperJavaFile = TestResourceReader.readJavaFileObject("MyMapperWithDottedName");
+
+            // when
+            var compilation = javac()
+                    .withProcessors(metadataProcessor)
+                    .compile(List.of(mapperJavaFile));
+
+            // then
+            assertThat(compilation).failed();
+            assertThat(compilation).hasError("lass name can not contain a dot, received: MyMapperWithDottedNameMetadata.java, defined in \"MyMapperWithDottedName\"");
         }
 
     }

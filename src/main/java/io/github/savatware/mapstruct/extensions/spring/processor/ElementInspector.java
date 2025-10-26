@@ -23,12 +23,6 @@ public class ElementInspector {
     public Optional<String> getClassName(Element element) {
         var actualAnnotation = element.getAnnotation(MappingMetadata.class);
         var className = actualAnnotation.value().trim();
-
-        if (className.contains(".")) {
-            processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, "Class name can not contain a dot, received: " + className);
-            return Optional.empty();
-        }
-
         processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE, " *** Class: " + className);
         return Optional.of(className);
     }
@@ -46,6 +40,11 @@ public class ElementInspector {
         });
 
         return mappings;
+    }
+
+    public String getContainingClass(Element element) {
+        var classElement = element.getEnclosingElement();
+        return classElement.getSimpleName().toString();
     }
 
     public String getPackageName(Element element) {

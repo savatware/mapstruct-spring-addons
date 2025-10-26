@@ -7,6 +7,7 @@ import javax.tools.Diagnostic;
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import static io.github.savatware.mapstruct.extensions.spring.processor.GeneratedFileWriter.writeFile;
@@ -48,13 +49,24 @@ public class MappingMetadataProcessor extends AbstractProcessor {
         for (var annotation : annotations) {
             for (var element : roundEnv.getElementsAnnotatedWith(annotation)) {
                 processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE, "Processing mapping metadata for " + element.getSimpleName());
+
+                // TODO cleanup by combining properties in a class
                 var packageFullyQualifiedName = elementInspector.getPackageName(element);
                 var className = elementInspector.getClassName(element).orElse("");
                 var mappings = elementInspector.getMappings(element);
-                var filer = processingEnv.getFiler();
                 var dateTime = getDateTime();
 
+                if (className.contains(".")) {
+                    var containingClass = elementInspector.getContainingClass(element);
+                    processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR,
+                            "Class name can not contain a dot, received: " + className + ", defined in \"" + containingClass + "\"");
+                    continue; // skip invalid class names
+                }
+
                 if (className.isEmpty()) {
+                    var containingClass = elementInspector.getContainingClass(element);
+                    processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR,
+                            "Skipping creation for requested empty classname, defined in \"" + containingClass + "\"");
                     continue; // skip invalid class names
                 }
 
@@ -66,7 +78,8 @@ public class MappingMetadataProcessor extends AbstractProcessor {
                     }
                     generatedClasses.add(fqdn);
 
-                    var fileObject = filer.createSourceFile(packageFullyQualifiedName + "." + className);
+                    var filer = processingEnv.getFiler();
+                    var fileObject = filer.createSourceFile(fqdn);
                     try (var writer = fileObject.openWriter()) {
                         writeFile(writer, packageFullyQualifiedName, className, mappings, dateTime);
                     }
