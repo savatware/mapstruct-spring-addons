@@ -85,7 +85,7 @@ public class CarService {
     
     @Autowired
     @Qualifier("carMappingMetadata")
-    private MappingMetadataLookup carMapperMetadata;
+    private MappingMetadataLookup carMappingMetadata;
 
     @Autowired
     private final CarMapper carMapper;
