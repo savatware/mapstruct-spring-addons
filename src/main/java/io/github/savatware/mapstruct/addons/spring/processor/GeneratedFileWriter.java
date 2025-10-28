@@ -15,15 +15,15 @@ public class GeneratedFileWriter {
 
     private static final String INDENT = "  ";
 
-    public static void writeFile(Writer writer, MappingMetadataProcessor.Fields fields) throws IOException {
-        if (fields.hasPackageName()) {
-            writePackage(writer, fields.getPackageName());
+    public static void writeFile(Writer writer, MappingAnnotationAttributes attributes) throws IOException {
+        if (attributes.hasPackageName()) {
+            writePackage(writer, attributes.getPackageName());
         }
         writeImports(writer);
-        writeGeneratedAnnotation(writer, fields.getDateTime());
+        writeGeneratedAnnotation(writer, attributes.getDateTime());
         writeSpringStereotypeAnnotation(writer);
-        writeClassStart(writer, fields.getClassName());
-        writeConstructorAndMappings(fields.getMappings(), writer, fields.getClassName());
+        writeClassStart(writer, attributes.getClassName());
+        writeConstructorAndMappings(attributes.getMappings(), writer, attributes.getClassName());
         writeMappingMethods(writer);
         writeClassEnd(writer);
     }
@@ -38,7 +38,6 @@ public class GeneratedFileWriter {
         writer.write("\n");
     }
 
-    // TODO only add if the component type is Spring
     private static void writeSpringStereotypeAnnotation(Writer writer) throws IOException {
         writer.write("@Component\n");
     }
