@@ -27,6 +27,11 @@ public class TestResourceReader {
         return JavaFileObjects.forSourceString("com.mycompany.test." + javaFilename, javaSourceCode);
     }
 
+    public static JavaFileObject readJavaFileObjectWithoutPackage(String javaFilename) {
+        var javaSourceCode = readJavaSource(javaFilename);
+        return JavaFileObjects.forSourceString(javaFilename, javaSourceCode);
+    }
+
     public static String stripCarriageReturn(String text) {
         return text.replace("\r", "");
     }

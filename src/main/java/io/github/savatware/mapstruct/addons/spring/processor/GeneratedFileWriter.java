@@ -16,7 +16,9 @@ public class GeneratedFileWriter {
     private static final String INDENT = "  ";
 
     public static void writeFile(Writer writer, MappingMetadataProcessor.Fields fields) throws IOException {
-        writePackage(writer, fields.getPackageName());
+        if (fields.hasPackageName()) {
+            writePackage(writer, fields.getPackageName());
+        }
         writeImports(writer);
         writeGeneratedAnnotation(writer, fields.getDateTime());
         writeSpringStereotypeAnnotation(writer);

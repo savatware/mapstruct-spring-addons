@@ -14,7 +14,6 @@ import static io.github.savatware.mapstruct.addons.spring.testutils.CompilationA
 
 class MappingMetadataProcessorTest {
 
-
     @Nested
     class ReadmeTests {
 
@@ -42,22 +41,50 @@ class MappingMetadataProcessorTest {
 
     }
 
-    // TODO test suite for packages: test with package, without package
+    @Nested
+    class PackageTests {
 
-    // TODO test suite for component type: test for spring for others
+        @Test
+        void whenNoPackageSpecified_thenGeneration_succeeds() {
+            // given
+            var metadataProcessor = createMappingMetadataProcessor();
+            var mapperJavaFile = TestResourceReader.readJavaFileObjectWithoutPackage("MyMapperWithoutPackage");
+            var expectedSourceCode = TestResourceReader.readJavaSource("MyMappingWithoutPackageMetadata");
+
+            // when
+            var compilation = javac()
+                    .withProcessors(metadataProcessor)
+                    .compile(List.of(mapperJavaFile));
+
+            // then
+            assertThat(compilation).succeeded();
+            assertThat(compilation).generatedSourceJavaFiles().hasSize(1);
+            assertThat(compilation).generatedSourceCode("MyMappingWithoutPackageMetadata").isEqualTo(expectedSourceCode);
+        }
+
+    }
 
     // TODO test suite for checking Mapper's attributes are correctly put into MapperDescription
 
     @Nested
     class ClassNameTests {
 
-        // TODO test with multiple source files
+        @Test
+        void whenDuplicateClassName_inMultipleFiles_thenGeneration_fails() {
+            // given
+            var metadataProcessor = createMappingMetadataProcessor();
+            var mapperOneJavaFile = TestResourceReader.readJavaFileObject("MyMapperMultiOne");
+            var mapperTwoJavaFile = TestResourceReader.readJavaFileObject("MyMapperMultiTwo");
 
-        // TODO test with multiple source files with same class name
+            // when
+            var compilation = javac()
+                    .withProcessors(metadataProcessor)
+                    .compile(List.of(mapperOneJavaFile, mapperTwoJavaFile));
 
-        // TODO test when same classname used twice
-
-        // TODO test when no specified classname
+            // then
+            assertThat(compilation).failed();
+            assertThat(compilation).hasError("duplicate class \"com.mycompany.test.MyMultiMappingMetadata\"");
+        }
 
         @Test
         void whenClassNameSpecified_thenFileName_isCorrect() {
@@ -90,7 +117,7 @@ class MappingMetadataProcessorTest {
 
             // then
             assertThat(compilation).failed();
-            assertThat(compilation).hasError("Skipping creation for requested empty classname, defined in \"MyMapperWithEmptyName\"");
+            assertThat(compilation).hasError("Not allowed to define an empty classname, defined in \"MyMapperWithEmptyName\"");
         }
 
         @Test
@@ -106,7 +133,7 @@ class MappingMetadataProcessorTest {
 
             // then
             assertThat(compilation).failed();
-            assertThat(compilation).hasError("lass name can not contain a dot, received: MyMapperWithDottedNameMetadata.java, defined in \"MyMapperWithDottedName\"");
+            assertThat(compilation).hasError("Class name can not contain a dot, received: MyMapperWithDottedNameMetadata.java, defined in \"MyMapperWithDottedName\"");
         }
 
     }

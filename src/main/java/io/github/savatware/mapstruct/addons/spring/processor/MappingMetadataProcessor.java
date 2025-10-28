@@ -65,14 +65,15 @@ public class MappingMetadataProcessor extends AbstractProcessor {
                 if (fields.getClassName().isEmpty()) {
                     var containingClass = elementInspector.getContainingClass(element);
                     processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR,
-                            "Skipping creation for requested empty classname, defined in \"" + containingClass + "\"");
+                            "Not allowed to define an empty classname, defined in \"" + containingClass + "\"");
                     continue; // skip invalid class names
                 }
 
                 try {
                     var fqdn = fields.getFullyQualifiedName();
                     if (generatedClasses.contains(fqdn)) {
-                        processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, "Skipping creation for duplicate class, received: " + fqdn);
+                        processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR,
+                                "Found duplicate class \"" + fqdn + "\"");
                         continue;
                     }
                     generatedClasses.add(fqdn);
@@ -105,7 +106,14 @@ public class MappingMetadataProcessor extends AbstractProcessor {
             this.dateTime = dateTime;
         }
 
+        public boolean hasPackageName() {
+            return packageName != null && !packageName.isEmpty();
+        }
+
         public String getFullyQualifiedName() {
+            if (!hasPackageName()) {
+                return className;
+            }
             return packageName + "." + className;
         }
 
