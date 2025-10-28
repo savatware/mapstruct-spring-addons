@@ -4,10 +4,10 @@ import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
-import javax.tools.Diagnostic;
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import static io.github.savatware.mapstruct.addons.spring.processor.GeneratedFileWriter.writeFile;
@@ -47,12 +47,8 @@ public class MappingMetadataProcessor extends AbstractProcessor {
         for (var annotation : annotations) {
             for (var element : roundEnv.getElementsAnnotatedWith(annotation)) {
                 processingEnv.getMessager().printMessage(NOTE, "Processing mapping metadata for " + element.getSimpleName());
-
-                var attributes = new MappingAnnotationAttributes(elementInspector, element, getDateTime());
-                if (hasInvalidAttributes(attributes, elementInspector, element)) {
-                    continue;
-                }
-                generate(attributes, generatedClasses);
+                createAttributes(elementInspector, element)
+                        .ifPresent(attributes -> generate(attributes, generatedClasses));
             }
         }
         return true; // No further processing of this annotation
@@ -60,6 +56,14 @@ public class MappingMetadataProcessor extends AbstractProcessor {
 
     void setDateTime(ZonedDateTime dateTime) {
         now = dateTime;
+    }
+
+    private Optional<MappingAnnotationAttributes> createAttributes(ElementInspector elementInspector, Element element) {
+        var attributes = new MappingAnnotationAttributes(elementInspector, element, getDateTime());
+        if (hasInvalidAttributes(attributes, elementInspector, element)) {
+            return Optional.empty();
+        }
+        return Optional.of(attributes);
     }
 
     private boolean hasInvalidAttributes(MappingAnnotationAttributes attributes, ElementInspector elementInspector, Element element) {
