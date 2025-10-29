@@ -1,13 +1,14 @@
 package io.github.savatware.mapstruct.addons.spring.processor.metadata;
 
+import io.github.savatware.mapstruct.addons.spring.processor.AbstractAddonProcessor;
 import io.github.savatware.mapstruct.addons.spring.processor.ElementInspector;
 
-import javax.annotation.processing.*;
-import javax.lang.model.SourceVersion;
+import javax.annotation.processing.Processor;
+import javax.annotation.processing.RoundEnvironment;
+import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import java.io.IOException;
-import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -21,26 +22,7 @@ import static javax.tools.Diagnostic.Kind.NOTE;
  * annotated with {@code @MappingMetadata}).
  */
 @SupportedAnnotationTypes("io.github.savatware.mapstruct.addons.spring.MappingMetadata")
-public class MappingMetadataProcessor extends AbstractProcessor {
-
-    private ZonedDateTime now;
-
-    @Override
-    public synchronized void init(ProcessingEnvironment processingEnv) {
-        super.init(processingEnv);
-    }
-
-    @Override
-    public SourceVersion getSupportedSourceVersion() {
-        return SourceVersion.latestSupported();
-    }
-
-    public ZonedDateTime getDateTime() {
-        if (now == null) {
-            now = ZonedDateTime.now();
-        }
-        return now;
-    }
+public class MappingMetadataProcessor extends AbstractAddonProcessor {
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
@@ -56,10 +38,6 @@ public class MappingMetadataProcessor extends AbstractProcessor {
         return true; // No further processing of this annotation
     }
 
-    void setDateTime(ZonedDateTime dateTime) {
-        now = dateTime;
-    }
-
     private Optional<MappingAnnotationAttributes> createAttributes(ElementInspector elementInspector, Element element) {
         var attributes = new MappingAnnotationAttributes(elementInspector, element, getDateTime());
         if (hasInvalidAttributes(attributes, elementInspector, element)) {
@@ -69,32 +47,44 @@ public class MappingMetadataProcessor extends AbstractProcessor {
     }
 
     private boolean hasInvalidAttributes(MappingAnnotationAttributes attributes, ElementInspector elementInspector, Element element) {
-        if (attributes.getClassName().contains(".")) {
-            var containingClass = elementInspector.getContainingClass(element);
-            processingEnv.getMessager().printMessage(ERROR,
-                    "Class name can not contain a dot, received: " + attributes.getClassName() + ", defined in \"" + containingClass + "\"");
-            return true;
-        }
+        return hasClassnameContainingDot(attributes, elementInspector, element)
+                || hasEmptyClassname(attributes, elementInspector, element);
+    }
 
+    private boolean hasEmptyClassname(MappingAnnotationAttributes attributes, ElementInspector elementInspector, Element element) {
         if (attributes.getClassName().isEmpty()) {
             var containingClass = elementInspector.getContainingClass(element);
             processingEnv.getMessager().printMessage(ERROR,
                     "Not allowed to define an empty classname, defined in \"" + containingClass + "\"");
             return true;
         }
+        return false;
+    }
 
+    private boolean hasClassnameContainingDot(MappingAnnotationAttributes attributes, ElementInspector elementInspector, Element element) {
+        if (attributes.getClassName().contains(".")) {
+            var containingClass = elementInspector.getContainingClass(element);
+            processingEnv.getMessager().printMessage(ERROR,
+                    "Class name can not contain a dot, received: " + attributes.getClassName() + ", defined in \"" + containingClass + "\"");
+            return true;
+        }
         return false;
     }
 
     private void generate(MappingAnnotationAttributes attributes, Set<String> generatedClasses) {
+        var fqdn = attributes.getFullyQualifiedName();
+        if (generatedClasses.contains(fqdn)) {
+            processingEnv.getMessager().printMessage(ERROR, "Found duplicate class \"" + fqdn + "\"");
+            return;
+        }
+        generatedClasses.add(fqdn);
+
+        generateSourceFile(attributes);
+    }
+
+    private void generateSourceFile(MappingAnnotationAttributes attributes) {
         try {
             var fqdn = attributes.getFullyQualifiedName();
-            if (generatedClasses.contains(fqdn)) {
-                processingEnv.getMessager().printMessage(ERROR, "Found duplicate class \"" + fqdn + "\"");
-                return;
-            }
-            generatedClasses.add(fqdn);
-
             var filer = processingEnv.getFiler();
             var fileObject = filer.createSourceFile(fqdn);
             try (var writer = fileObject.openWriter()) {

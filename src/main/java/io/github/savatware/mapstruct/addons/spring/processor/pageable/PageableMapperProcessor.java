@@ -1,11 +1,12 @@
 package io.github.savatware.mapstruct.addons.spring.processor.pageable;
 
+import io.github.savatware.mapstruct.addons.spring.processor.AbstractAddonProcessor;
 import io.github.savatware.mapstruct.addons.spring.processor.ElementInspector;
 
-import javax.annotation.processing.*;
-import javax.lang.model.SourceVersion;
+import javax.annotation.processing.Processor;
+import javax.annotation.processing.RoundEnvironment;
+import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.lang.model.element.TypeElement;
-import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,26 +17,7 @@ import static javax.tools.Diagnostic.Kind.NOTE;
  * annotated with {@code @PageableMapper}).
  */
 @SupportedAnnotationTypes("io.github.savatware.mapstruct.addons.spring.PageableMapper")
-public class PageableMapperProcessor extends AbstractProcessor {
-
-    private ZonedDateTime now;
-
-    @Override
-    public synchronized void init(ProcessingEnvironment processingEnv) {
-        super.init(processingEnv);
-    }
-
-    @Override
-    public SourceVersion getSupportedSourceVersion() {
-        return SourceVersion.latestSupported();
-    }
-
-    public ZonedDateTime getDateTime() {
-        if (now == null) {
-            now = ZonedDateTime.now();
-        }
-        return now;
-    }
+public class PageableMapperProcessor extends AbstractAddonProcessor {
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
@@ -50,7 +32,4 @@ public class PageableMapperProcessor extends AbstractProcessor {
         return true; // No further processing of this annotation
     }
 
-    void setDateTime(ZonedDateTime dateTime) {
-        now = dateTime;
-    }
 }
