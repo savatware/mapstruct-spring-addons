@@ -12,9 +12,10 @@ import io.github.savatware.mapstruct.addons.spring.MappingMetadataLookup.Mapping
 @Component
 public class MyMappingWithoutPackageMetadata implements MappingMetadataLookup {
 
-    private final List<MappingDescription> mappingDescriptions = new ArrayList<>();
+    private final List<MappingDescription> mappingDescriptions;
 
     public MyMappingWithoutPackageMetadata() {
+        mappingDescriptions = new ArrayList<>();
     }
 
     @Override

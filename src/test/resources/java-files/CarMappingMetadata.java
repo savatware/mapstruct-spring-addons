@@ -14,9 +14,10 @@ import io.github.savatware.mapstruct.addons.spring.MappingMetadataLookup.Mapping
 @Component
 public class CarMappingMetadata implements MappingMetadataLookup {
 
-    private final List<MappingDescription> mappingDescriptions = new ArrayList<>();
+    private final List<MappingDescription> mappingDescriptions;
 
     public CarMappingMetadata() {
+        mappingDescriptions = new ArrayList<>();
         mappingDescriptions.add(new MappingDescription("make", "manufacturer", "", "", "", "", "", false, new String[] {}, new String[] {}, "", new String[] {}, ""));
         mappingDescriptions.add(new MappingDescription("numberOfSeats", "seatCount", "", "", "", "", "", false, new String[] {}, new String[] {}, "", new String[] {}, ""));
     }

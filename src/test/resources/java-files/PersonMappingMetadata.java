@@ -14,9 +14,10 @@ import io.github.savatware.mapstruct.addons.spring.MappingMetadataLookup.Mapping
 @Component
 public class PersonMappingMetadata implements MappingMetadataLookup {
 
-    private final List<MappingDescription> mappingDescriptions = new ArrayList<>();
+    private final List<MappingDescription> mappingDescriptions;
 
     public PersonMappingMetadata() {
+        mappingDescriptions = new ArrayList<>();
         mappingDescriptions.add(new MappingDescription("name", "fullName", "", "", "", "", "", false, new String[] {}, new String[] {}, "", new String[] {}, ""));
     }
 

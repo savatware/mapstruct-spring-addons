@@ -48,9 +48,10 @@ public class GeneratedFileWriter {
     }
 
     private static void writeConstructorAndMappings(List<MappingDescription> mappings, Writer writer, String className) throws IOException {
-        writer.write(INDENT + "private final List<MappingDescription> mappingDescriptions = new ArrayList<>();\n");
+        writer.write(INDENT + "private final List<MappingDescription> mappingDescriptions;\n");
         writer.write("\n");
         writer.write(INDENT + "public " + className + "() {\n");
+        writer.write(INDENT + INDENT + "mappingDescriptions = new ArrayList<>();\n");
 
         for (var mapping : mappings) {
             writer.write(INDENT + INDENT + "mappingDescriptions.add(new MappingDescription(" +
