@@ -1,1 +1,2 @@
 io.github.savatware.mapstruct.addons.spring.processor.MappingMetadataProcessor
+io.github.savatware.mapstruct.addons.spring.processor.PageableMapperProcessor

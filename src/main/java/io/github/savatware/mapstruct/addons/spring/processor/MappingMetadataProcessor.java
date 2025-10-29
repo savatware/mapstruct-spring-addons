@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-import static io.github.savatware.mapstruct.addons.spring.processor.GeneratedFileWriter.writeFile;
+import static io.github.savatware.mapstruct.addons.spring.processor.MappingMetadataSourceWriter.writeFile;
 import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.Diagnostic.Kind.NOTE;
 
