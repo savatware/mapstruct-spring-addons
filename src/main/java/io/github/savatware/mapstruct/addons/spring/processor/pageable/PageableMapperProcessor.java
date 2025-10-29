@@ -1,4 +1,4 @@
-package io.github.savatware.mapstruct.addons.spring.processor;
+package io.github.savatware.mapstruct.addons.spring.processor.pageable;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.Processor;

@@ -1,6 +1,7 @@
-package io.github.savatware.mapstruct.addons.spring.processor;
+package io.github.savatware.mapstruct.addons.spring.processor.metadata;
 
 import io.github.savatware.mapstruct.addons.spring.MappingMetadataLookup.MappingDescription;
+import io.github.savatware.mapstruct.addons.spring.processor.ElementInspector;
 
 import javax.lang.model.element.Element;
 import java.time.ZonedDateTime;

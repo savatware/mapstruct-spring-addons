@@ -1,4 +1,4 @@
-package io.github.savatware.mapstruct.addons.spring.processor;
+package io.github.savatware.mapstruct.addons.spring.processor.metadata;
 
 
 import io.github.savatware.mapstruct.addons.spring.MappingMetadataLookup.MappingDescription;

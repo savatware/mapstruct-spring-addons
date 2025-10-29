@@ -1,4 +1,6 @@
-package io.github.savatware.mapstruct.addons.spring.processor;
+package io.github.savatware.mapstruct.addons.spring.processor.metadata;
+
+import io.github.savatware.mapstruct.addons.spring.processor.ElementInspector;
 
 import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
@@ -10,7 +12,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-import static io.github.savatware.mapstruct.addons.spring.processor.MappingMetadataSourceWriter.writeFile;
+import static io.github.savatware.mapstruct.addons.spring.processor.metadata.MappingMetadataSourceWriter.writeFile;
 import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.Diagnostic.Kind.NOTE;
 

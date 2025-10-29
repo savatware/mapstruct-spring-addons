@@ -6,7 +6,7 @@ import io.github.savatware.mapstruct.addons.spring.MappingMetadataLookup;
 import io.github.savatware.mapstruct.addons.spring.MappingMetadataLookup.MappingDescription;
 
 @Generated(
-        value = "io.github.savatware.mapstruct.addons.spring.processor.MappingMetadataProcessor",
+        value = "io.github.savatware.mapstruct.addons.spring.processor.metadata.MappingMetadataProcessor",
         date = "2025-10-16T09:32:43+0200"
 )
 @Component
