@@ -1,7 +1,7 @@
 package io.github.savatware.mapstruct.addons.spring.processor;
 
 
-import io.github.savatware.mapstruct.addons.spring.MappingDescription;
+import io.github.savatware.mapstruct.addons.spring.MappingMetadataLookup.MappingDescription;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -95,7 +95,7 @@ public class GeneratedFileWriter {
         writer.write("import java.util.List;\n");
         writer.write("import java.util.ArrayList;\n");
         writer.write("import io.github.savatware.mapstruct.addons.spring.MappingMetadataLookup;\n");
-        writer.write("import io.github.savatware.mapstruct.addons.spring.MappingDescription;\n");
+        writer.write("import io.github.savatware.mapstruct.addons.spring.MappingMetadataLookup.MappingDescription;\n");
         writer.write("\n");
     }
 

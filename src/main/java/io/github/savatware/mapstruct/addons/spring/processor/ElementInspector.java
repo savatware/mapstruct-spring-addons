@@ -1,6 +1,6 @@
 package io.github.savatware.mapstruct.addons.spring.processor;
 
-import io.github.savatware.mapstruct.addons.spring.MappingDescription;
+import io.github.savatware.mapstruct.addons.spring.MappingMetadataLookup.MappingDescription;
 import io.github.savatware.mapstruct.addons.spring.MappingMetadata;
 import org.mapstruct.Mapping;
 

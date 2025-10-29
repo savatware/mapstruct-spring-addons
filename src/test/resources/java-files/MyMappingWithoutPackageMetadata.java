@@ -3,7 +3,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.ArrayList;
 import io.github.savatware.mapstruct.addons.spring.MappingMetadataLookup;
-import io.github.savatware.mapstruct.addons.spring.MappingDescription;
+import io.github.savatware.mapstruct.addons.spring.MappingMetadataLookup.MappingDescription;
 
 @Generated(
         value = "io.github.savatware.mapstruct.addons.spring.processor.MappingMetadataProcessor",
