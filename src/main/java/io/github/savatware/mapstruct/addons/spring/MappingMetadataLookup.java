@@ -3,7 +3,9 @@ package io.github.savatware.mapstruct.addons.spring;
 import java.util.List;
 
 /**
- * Usage: the qualified SpringBean name is the name of the generated class but in camelCase.
+ * Implementations of this interface allow you to access the MapStruct mappings.
+ *
+ * Usage: the name of the qualified SpringBean is the name of the generated class but in camelCase.
  * e.g.
  *   @Autowired
  *   @Qualifier("myDtoMetadata")

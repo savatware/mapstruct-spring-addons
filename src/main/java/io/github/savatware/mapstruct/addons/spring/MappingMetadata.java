@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface MappingMetadata {
 
-     /** Name of the generated class. When using this annotation multiple times in your project, make sure to use a unique name. */
+     /** Name of the generated class, make sure to use a unique name. */
     String value();
 
 }
